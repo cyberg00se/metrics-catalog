@@ -39,13 +39,13 @@ class UserService extends ApiService {
   }
 
   async existByEmail(email) {
-    return await User.exists({
+    return !! await User.exists({
       email,
     });
   }
 
   async existByUserName(userName) {
-    return await User.exists({
+    return !! await User.exists({
       userName,
     });
   }
