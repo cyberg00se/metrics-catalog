@@ -1,0 +1,512 @@
+{
+	"id": "88e77fc1-1213-4fbb-b7fb-323a583a2136",
+	"name": "Metrics Catalog API Tests",
+	"timestamp": "2022-06-06T21:42:39.052Z",
+	"collection_id": "9cc7f06a-3e9e-43c8-ab09-81da75551f95",
+	"folder_id": 0,
+	"environment_id": "004b3778-8da6-4f03-9d33-5f7051a27cdc",
+	"totalPass": 24,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "0d8902b8-8221-411c-be0f-a344f4d5328f",
+			"name": "GET healthcheck Success",
+			"url": "https://localhost:3000/",
+			"time": 23,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"health check should pass": true
+			},
+			"testPassFailCounts": {
+				"health check should pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"health check should pass": true
+				}
+			]
+		},
+		{
+			"id": "e872e39b-5f38-4d5b-8861-774eafd572d4",
+			"name": "Register User 1",
+			"url": "https://localhost:3000/signup",
+			"time": 133,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Created user": true,
+				"Has a token": true
+			},
+			"testPassFailCounts": {
+				"Created user": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Has a token": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				133
+			],
+			"allTests": [
+				{
+					"Created user": true,
+					"Has a token": true
+				}
+			]
+		},
+		{
+			"id": "e687db79-fe1f-4470-877b-b43d817db30e",
+			"name": "Login User 1",
+			"url": "https://localhost:3000/signin",
+			"time": 76,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Logged in": true,
+				"Has a token": true
+			},
+			"testPassFailCounts": {
+				"Logged in": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Has a token": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				76
+			],
+			"allTests": [
+				{
+					"Logged in": true,
+					"Has a token": true
+				}
+			]
+		},
+		{
+			"id": "88132154-54db-4669-81bc-3cd494d7c5a9",
+			"name": "GET me",
+			"url": "https://localhost:3000/users/me",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Received myself": true,
+				"Received private response": true
+			},
+			"testPassFailCounts": {
+				"Received myself": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received private response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Received myself": true,
+					"Received private response": true
+				}
+			]
+		},
+		{
+			"id": "2bc70460-e19b-4d8d-bb90-635c8dfc111e",
+			"name": "GET Another User",
+			"url": "https://localhost:3000/users/629e74cf96ecad895c270cc9",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Received another user": true,
+				"Received public response": true
+			},
+			"testPassFailCounts": {
+				"Received another user": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received public response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Received another user": true,
+					"Received public response": true
+				}
+			]
+		},
+		{
+			"id": "b4934a70-8e18-4716-9ad7-449c042749c2",
+			"name": "UPDATE me (bio)",
+			"url": "https://localhost:3000/users/me",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Updated myself": true,
+				"Received private response with bio": true
+			},
+			"testPassFailCounts": {
+				"Updated myself": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received private response with bio": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Updated myself": true,
+					"Received private response with bio": true
+				}
+			]
+		},
+		{
+			"id": "8d8de370-fa2c-439b-ba0a-86453aef8e04",
+			"name": "Update password",
+			"url": "https://localhost:3000/users/me/password",
+			"time": 122,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Updated password": true,
+				"Received private response with bio": true
+			},
+			"testPassFailCounts": {
+				"Updated password": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received private response with bio": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				122
+			],
+			"allTests": [
+				{
+					"Updated password": true,
+					"Received private response with bio": true
+				}
+			]
+		},
+		{
+			"id": "67ddda4a-390e-4b5f-a37f-1bd3322c0fa9",
+			"name": "GET metrics",
+			"url": "https://localhost:3000/metrics",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Received my metrics": true
+			},
+			"testPassFailCounts": {
+				"Received my metrics": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Received my metrics": true
+				}
+			]
+		},
+		{
+			"id": "ae9f07cb-a384-427b-af2b-cd8d99a433ed",
+			"name": "Add metric",
+			"url": "https://localhost:3000/metric",
+			"time": 8,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Added metric": true,
+				"Received last metric": true
+			},
+			"testPassFailCounts": {
+				"Added metric": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received last metric": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Added metric": true,
+					"Received last metric": true
+				}
+			]
+		},
+		{
+			"id": "bae137ce-9495-4b78-b2ed-b2402f6c6f8c",
+			"name": "GET metric by id",
+			"url": "https://localhost:3000/metric/629e74d096ecad895c270cd8",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Received metric": true,
+				"Received correct id": true
+			},
+			"testPassFailCounts": {
+				"Received metric": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received correct id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Received metric": true,
+					"Received correct id": true
+				}
+			]
+		},
+		{
+			"id": "0e05124a-924e-4ea4-a412-95b49e420896",
+			"name": "UPDATE metric by id",
+			"url": "https://localhost:3000/metric/629e74d096ecad895c270cd8",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Updated metric": true,
+				"Received last metric updated": true
+			},
+			"testPassFailCounts": {
+				"Updated metric": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Received last metric updated": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Updated metric": true,
+					"Received last metric updated": true
+				}
+			]
+		},
+		{
+			"id": "ae99580e-2783-41c2-a0cc-ab773e4c2fd0",
+			"name": "REMOVE metric by id",
+			"url": "https://localhost:3000/metric/629e74d096ecad895c270cd8",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Removed metric": true,
+				"Removed correct id": true
+			},
+			"testPassFailCounts": {
+				"Removed metric": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Removed correct id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Removed metric": true,
+					"Removed correct id": true
+				}
+			]
+		},
+		{
+			"id": "1ad54b57-fb83-4f83-90f2-67a4761cf6e4",
+			"name": "Check if username is registered",
+			"url": "https://localhost:3000/signup/username/user.1654551759406",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Checked data": true
+			},
+			"testPassFailCounts": {
+				"Checked data": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Checked data": true
+				}
+			]
+		},
+		{
+			"id": "9c0a256b-94f8-4cc8-8c8b-3084d3202ccb",
+			"name": "Check if email is registered",
+			"url": "https://localhost:3000/signup/email/user.1654551759406@test.com",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Checked data": true
+			},
+			"testPassFailCounts": {
+				"Checked data": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Checked data": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 463,
+	"collection": {
+		"requests": [
+			{
+				"id": "0d8902b8-8221-411c-be0f-a344f4d5328f",
+				"method": "GET"
+			},
+			{
+				"id": "e872e39b-5f38-4d5b-8861-774eafd572d4",
+				"method": "POST"
+			},
+			{
+				"id": "e687db79-fe1f-4470-877b-b43d817db30e",
+				"method": "POST"
+			},
+			{
+				"id": "88132154-54db-4669-81bc-3cd494d7c5a9",
+				"method": "GET"
+			},
+			{
+				"id": "2bc70460-e19b-4d8d-bb90-635c8dfc111e",
+				"method": "GET"
+			},
+			{
+				"id": "b4934a70-8e18-4716-9ad7-449c042749c2",
+				"method": "POST"
+			},
+			{
+				"id": "8d8de370-fa2c-439b-ba0a-86453aef8e04",
+				"method": "POST"
+			},
+			{
+				"id": "67ddda4a-390e-4b5f-a37f-1bd3322c0fa9",
+				"method": "GET"
+			},
+			{
+				"id": "ae9f07cb-a384-427b-af2b-cd8d99a433ed",
+				"method": "POST"
+			},
+			{
+				"id": "bae137ce-9495-4b78-b2ed-b2402f6c6f8c",
+				"method": "GET"
+			},
+			{
+				"id": "0e05124a-924e-4ea4-a412-95b49e420896",
+				"method": "POST"
+			},
+			{
+				"id": "ae99580e-2783-41c2-a0cc-ab773e4c2fd0",
+				"method": "DELETE"
+			},
+			{
+				"id": "1ad54b57-fb83-4f83-90f2-67a4761cf6e4",
+				"method": "POST"
+			},
+			{
+				"id": "9c0a256b-94f8-4cc8-8c8b-3084d3202ccb",
+				"method": "POST"
+			}
+		]
+	}
+}

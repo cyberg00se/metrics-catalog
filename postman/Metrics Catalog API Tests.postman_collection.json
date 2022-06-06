@@ -1,0 +1,789 @@
+{
+	"info": {
+		"_postman_id": "9cc7f06a-3e9e-43c8-ab09-81da75551f95",
+		"name": "Metrics Catalog API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET healthcheck Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('health check should pass', () => {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register User 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now();",
+							"",
+							"let userName = 'user.' + date;",
+							"let email = userName + '@test.com';",
+							"let phoneNumber = '0670001122'",
+							"let password = userName + 'A@4d';",
+							"",
+							"pm.environment.set('userName', userName);",
+							"pm.environment.set('useremail', email);",
+							"pm.environment.set('userphoneNumber', phoneNumber);",
+							"pm.environment.set('userpassword', password);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Created user', () => {",
+							"    pm.response.to.have.status(201);",
+							"    const json_response = pm.response.json();",
+							"    pm.environment.set('userid', json_response.user._id);",
+							"})",
+							"",
+							"pm.test('Has a token', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.environment.set('token', json_response.token);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"testname\",\n    \"surname\": \"testsurname\",\n    \"email\": \"{{useremail}}\",\n    \"phoneNumber\": \"{{userphoneNumber}}\",\n    \"userName\": \"{{userName}}\",\n    \"password\": \"{{userpassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}signup",
+					"host": [
+						"{{baseURL}}signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Logged in', () => {",
+							"    pm.response.to.have.status(200);",
+							"    const json_response = pm.response.json();",
+							"    pm.environment.set('userid', json_response.user._id);",
+							"})",
+							"",
+							"pm.test('Has a token', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.environment.set('token', json_response.accessToken);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{userName}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{userpassword}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}signin",
+					"host": [
+						"{{baseURL}}signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Received myself', () => {",
+							"    pm.response.to.have.status(200);",
+							"    const json_response = pm.response.json();",
+							"    pm.environment.set('userid', json_response._id);",
+							"})",
+							"",
+							"pm.test('Received private response', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response).to.have.property('auth');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}users/me",
+					"host": [
+						"{{baseURL}}users"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Another User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Received another user', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Received public response', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.passwordHash).to.be.undefined;",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}users/:id",
+					"host": [
+						"{{baseURL}}users"
+					],
+					"path": [
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{userid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE me (bio)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Updated myself', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Received private response with bio', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.bio).to.be.a('string');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bio\": \"{{userName}} new test bio\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}users/me",
+					"host": [
+						"{{baseURL}}users"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now();",
+							"",
+							"let newpassword = date + 'D!5g';",
+							"",
+							"pm.environment.set('newuserpassword', newpassword);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Updated password', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Received private response with bio', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.status).to.eql('success');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"{{userpassword}}\",\n    \"newPassword\": \"{{newuserpassword}}\",\n    \"confirmNewPassword\": \"{{newuserpassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}users/me/password",
+					"host": [
+						"{{baseURL}}users"
+					],
+					"path": [
+						"me",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET metrics",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Received my metrics', () => {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}metrics",
+					"host": [
+						"{{baseURL}}metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add metric",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now();",
+							"",
+							"let lastmetricname = pm.environment.get('userName') + ' new metric Duplicated lines ' + date;",
+							"let lastmetricID = pm.environment.get('userName') + ' new metric DUP ' + date;",
+							"let lastmetricentity = 'Application';",
+							"let lastmetricattribute = 'Duplication';",
+							"let lastmetricdefinition = 'Count all lines which appear more than once in the system.';",
+							"let lastmetricrationale = 'The definition given above is a straight-forward implementation.';",
+							"let lastmetricimplications = 'Duplication in a system is considered to be an indication of poor design.';",
+							"let lastmetricapplication = 'It is applicable in a wide range of contexts, but in a migration project with a well-defined end-date a higher value of “Duplicated lines” might be acceptable.';",
+							"let lastmetriclevel = 'base';",
+							"let lastmetrictype = 'internal';",
+							"let lastmetricrange = '[0, inf]';",
+							"let lastmetricdefault = 'low';",
+							"let lastmetricvariability = '[-inf, inf]';",
+							"let lastmetricscale = 'absolute';",
+							"",
+							"pm.environment.set('lastmetricname', lastmetricname);",
+							"pm.environment.set('lastmetricID', lastmetricID);",
+							"pm.environment.set('lastmetricentity', lastmetricentity);",
+							"pm.environment.set('lastmetricattribute', lastmetricattribute);",
+							"pm.environment.set('lastmetricdefinition', lastmetricdefinition);",
+							"pm.environment.set('lastmetricrationale', lastmetricrationale);",
+							"pm.environment.set('lastmetricimplications', lastmetricimplications);",
+							"pm.environment.set('lastmetricapplication', lastmetricapplication);",
+							"pm.environment.set('lastmetriclevel', lastmetriclevel);",
+							"pm.environment.set('lastmetrictype', lastmetrictype);",
+							"pm.environment.set('lastmetricrange', lastmetricrange);",
+							"pm.environment.set('lastmetricdefault', lastmetricdefault);",
+							"pm.environment.set('lastmetricvariability', lastmetricvariability);",
+							"pm.environment.set('lastmetricscale', lastmetricscale);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Added metric', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('Received last metric', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.metric_name).to.eql(pm.environment.get('lastmetricname'));",
+							"    pm.environment.set('lastmetricid', json_response._id);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metric_name\": \"{{lastmetricname}}\",\n    \"metric_ID\": \"{{lastmetricID}}\",\n    \"metric_entity\": \"{{lastmetricentity}}\",\n    \"metric_attribute\": \"{{lastmetricentity}}\",\n    \"metric_definition\": \"{{lastmetricentity}}\",\n    \"metric_rationale\": \"{{lastmetricentity}}\",\n    \"metric_implications\": \"{{lastmetricentity}}\",\n    \"metric_application\": \"{{lastmetricentity}}\",\n    \"metric_level\": \"{{lastmetricentity}}\",\n    \"metric_type\": \"{{lastmetricentity}}\",\n    \"metric_range\": \"{{lastmetricentity}}\",\n    \"metric_default\": \"{{lastmetricentity}}\",\n    \"metric_variability\": \"{{lastmetricentity}}\",\n    \"metric_scale\": \"{{lastmetricscale}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}metric",
+					"host": [
+						"{{baseURL}}metric"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET metric by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Received metric', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Received correct id', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response._id).to.eql(pm.environment.get('lastmetricid'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}metric/:id",
+					"host": [
+						"{{baseURL}}metric"
+					],
+					"path": [
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{lastmetricid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE metric by id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now();",
+							"",
+							"let lastmetricname = pm.environment.get('userName') + ' new metric Duplicated lines ' + date;",
+							"let lastmetricID = pm.environment.get('userName') + ' new metric DUP ' + date;",
+							"let lastmetricentity = 'Application';",
+							"let lastmetricattribute = 'Duplication';",
+							"let lastmetricdefinition = 'Count all lines which appear more than once in the system.';",
+							"let lastmetricrationale = 'The definition given above is a straight-forward implementation.';",
+							"let lastmetricimplications = 'Duplication in a system is considered to be an indication of poor design.';",
+							"let lastmetricapplication = 'It is applicable in a wide range of contexts, but in a migration project with a well-defined end-date a higher value of “Duplicated lines” might be acceptable.';",
+							"let lastmetriclevel = 'base';",
+							"let lastmetrictype = 'internal';",
+							"let lastmetricrange = '[0, inf]';",
+							"let lastmetricdefault = 'low';",
+							"let lastmetricvariability = '[-inf, inf]';",
+							"let lastmetricscale = 'absolute';",
+							"",
+							"pm.environment.set('lastmetricname', lastmetricname);",
+							"pm.environment.set('lastmetricID', lastmetricID);",
+							"pm.environment.set('lastmetricentity', lastmetricentity);",
+							"pm.environment.set('lastmetricattribute', lastmetricattribute);",
+							"pm.environment.set('lastmetricdefinition', lastmetricdefinition);",
+							"pm.environment.set('lastmetricrationale', lastmetricrationale);",
+							"pm.environment.set('lastmetricimplications', lastmetricimplications);",
+							"pm.environment.set('lastmetricapplication', lastmetricapplication);",
+							"pm.environment.set('lastmetriclevel', lastmetriclevel);",
+							"pm.environment.set('lastmetrictype', lastmetrictype);",
+							"pm.environment.set('lastmetricrange', lastmetricrange);",
+							"pm.environment.set('lastmetricdefault', lastmetricdefault);",
+							"pm.environment.set('lastmetricvariability', lastmetricvariability);",
+							"pm.environment.set('lastmetricscale', lastmetricscale);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Updated metric', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Received last metric updated', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.metric_name).to.eql(pm.environment.get('lastmetricname'));",
+							"    pm.environment.set('lastmetricid', json_response._id);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metric_name\": \"{{lastmetricname}}\",\n    \"metric_ID\": \"{{lastmetricID}}\",\n    \"metric_entity\": \"{{lastmetricentity}}\",\n    \"metric_attribute\": \"{{lastmetricentity}}\",\n    \"metric_definition\": \"{{lastmetricentity}}  already updated\",\n    \"metric_rationale\": \"{{lastmetricentity}}\",\n    \"metric_implications\": \"{{lastmetricentity}}\",\n    \"metric_application\": \"{{lastmetricentity}}\",\n    \"metric_level\": \"{{lastmetricentity}}\",\n    \"metric_type\": \"{{lastmetricentity}}\",\n    \"metric_range\": \"{{lastmetricentity}}\",\n    \"metric_default\": \"{{lastmetricentity}}\",\n    \"metric_variability\": \"{{lastmetricentity}}\",\n    \"metric_scale\": \"{{lastmetricscale}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}metric/:id",
+					"host": [
+						"{{baseURL}}metric"
+					],
+					"path": [
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{lastmetricid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REMOVE metric by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Removed metric', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Removed correct id', () => {",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response._id).to.eql(pm.environment.get('lastmetricid'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}metric/:id",
+					"host": [
+						"{{baseURL}}metric"
+					],
+					"path": [
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{lastmetricid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if username is registered",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Checked data', () => {",
+							"    pm.response.to.have.status(200);",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.result).to.eql(true);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}signup/username/:username",
+					"host": [
+						"{{baseURL}}signup"
+					],
+					"path": [
+						"username",
+						":username"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{userName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if email is registered",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Checked data', () => {",
+							"    pm.response.to.have.status(200);",
+							"    const json_response = pm.response.json();",
+							"    pm.expect(json_response.result).to.eql(true);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}signup/email/:email",
+					"host": [
+						"{{baseURL}}signup"
+					],
+					"path": [
+						"email",
+						":email"
+					],
+					"variable": [
+						{
+							"key": "email",
+							"value": "{{userName}}@test.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
